@@ -13,6 +13,7 @@ def calc_start_of_summer(matrix, class_number, summer_params=def_summer_params):
     params = set_user_params(summer_params, def_summer_params)
 
     max_zero_allowed_per_year, max_nan_allowed_per_year, sigma, sensitivity, peak_sensitivity, max_peak_flow_date, min_summer_flow_percent, min_flow_rate = params.values()
+    earliest_date = 295 # new param for RGB, earliest possible date of summer timing
 
     start_dates = []
     for column_number, flow_data in enumerate(matrix[0]):
@@ -68,8 +69,8 @@ def calc_start_of_summer(matrix, class_number, summer_params=def_summer_params):
         for index, data in enumerate(smooth_data):
             if index == len(smooth_data)-2:
                 break
-            """Search criteria: derivative is under rate of change threshold, date is after last major peak, and flow is less than specified percent of smoothed max flow"""
-            if abs(spl_first(index)) < max_flow_data * current_sensitivity and index > max_flow_index and data < threshold:
+            """Search criteria: derivative is under rate of change threshold, date is after last major peak, date is after earliest allowed, and flow is less than specified percent of smoothed max flow"""
+            if abs(spl_first(index)) < max_flow_data * current_sensitivity and index > max_flow_index and index > earliest_date and data < threshold:
                 start_dates[-1] = index
                 break
 

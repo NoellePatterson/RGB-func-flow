@@ -14,12 +14,15 @@ def calc_spring_transition_timing_magnitude(flow_matrix, class_number, summer_ti
     max_zero_allowed_per_year, max_nan_allowed_per_year, max_peak_flow_date, search_window_left, search_window_right, peak_sensitivity, peak_filter_percentage, min_max_flow_rate, window_sigma, fit_sigma, sensitivity, min_percentage_of_max_flow, lag_time, timing_cutoff, min_flow_rate = params.values()
 
     timings = []
+    timings_endspring = []
     magnitudes = []
 
     for column_number, _ in enumerate(flow_matrix[0]):
 
         timings.append(None)
+        timings_endspring.append(None)
         magnitudes.append(None)
+
 
         """Check to see if water year has more than allowed nan or zeros"""
         if np.isnan(flow_matrix[:, column_number]).sum() > max_nan_allowed_per_year or np.count_nonzero(flow_matrix[:, column_number] == 0) > max_zero_allowed_per_year or max(flow_matrix[:, column_number]) < min_flow_rate:
@@ -154,6 +157,15 @@ def calc_spring_transition_timing_magnitude(flow_matrix, class_number, summer_ti
 
             if summer_timings[column_number] is not None and timings[-1] > summer_timings[column_number]:
                 timings[-1] = None
+                
+            """Create separate timing for the bottom of the spring recession"""
+            if timings[-1] == None:
+                timings_endspring[-1] = None
+            else:
+                spring_min = min(flow_data[timings[-1] + 28: timings[-1] + 42]) 
+                spring_min_index = find_index(flow_data[timings[-1] + 28: timings[-1] + 42], spring_min)
+                timings_endspring[-1] = timings[-1] + 28 + spring_min_index
+            timings[-1] = timings_endspring[-1]  # try directly substituting bottom timing for top one
 
             #_spring_transition_plotter(x_axis, flow_data, filter_data, x_axis_window, spl_first_deriv, new_index, max_flow_index, timings, current_search_window_left, current_search_window_right, spl, column_number, maxarray)
 
@@ -195,7 +207,9 @@ def calc_spring_transition_roc(flow_matrix, spring_timings, summer_timings):
                 raw_flow = list(flow_matrix[:, index]) + \
                     list(flow_matrix[:30, index + 1])
 
-            flow_data = raw_flow[int(spring_timing): int(summer_timing)]
+            # RGB change: set spring roc to calc from ~approx height of spring pulse (6 weeks before bottom of spring pulse)
+            # until the set bottom of the spring pulse (spring timing for RGB calcs.)
+            flow_data = raw_flow[int(spring_timing - 42): int(spring_timing)]
             rate_of_change_start_end = (
                 flow_data[-1] - flow_data[0]) / flow_data[0]
 

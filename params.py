@@ -26,7 +26,7 @@ fall_params = {
 spring_params = {
     'max_zero_allowed_per_year': 270,
     'max_nan_allowed_per_year': 100,
-    'max_peak_flow_date': 350,  # max search date for the peak flow date
+    'max_peak_flow_date': 200,  # max search date for the peak flow date
     'search_window_left': 20,  # left side of search window set around max peak
     'search_window_right': 50,  # right side of search window set around max peak
     'peak_sensitivity': 0.1,  # smaller':> more peaks detection
@@ -40,9 +40,9 @@ spring_params = {
     'sensitivity': 0.2,  # 0.1 - 10, 10 being the most sensitive
     # the detected date's flow has be certain percentage of the max flow in that region
     'min_percentage_of_max_flow': 0.5,
-    'lag_time': 4,
+    'lag_time': 0,
     # Earliest accepted date for spring timing, in Julian Date couting from Oct 1st = 0 (i.e. February 15 = 138)
-    'timing_cutoff': 138,
+    'timing_cutoff': 120,
     # Don't calculate flow metrics if max flow is befow this value.
     'min_flow_rate': 1
 }
