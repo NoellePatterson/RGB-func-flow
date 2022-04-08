@@ -230,8 +230,8 @@ def draw_plots(file_name, results):
         ax = fig.add_subplot(111)
         ax.plot(x_axis, flow_col)
         # import pdb; pdb.set_trace()
-        if fall_timings[index+1] is not None:
-            plt.axvline(fall_timings[index+1], ls=":", c="blue")
+        # if fall_timings[index+1] is not None:
+        #     plt.axvline(fall_timings[index+1], ls=":", c="blue")
         if wet_timings[index+1] is not None:
             plt.axvline(wet_timings[index+1], ls=":", c="green")
         if spring_timings[index+1] is not None:
