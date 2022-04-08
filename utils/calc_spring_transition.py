@@ -162,9 +162,9 @@ def calc_spring_transition_timing_magnitude(flow_matrix, class_number, summer_ti
 
             if summer_timings[column_number] is not None and timings[-1] > summer_timings[column_number]:
                 timings[-1] = None
-                
+
             """Create separate timing for the bottom of the spring recession"""
-            if timings[-1] == None:
+            if timings[-1] == None or timings[-1] > 315: # Can't set bottom of spring recession too late in year
                 timings_endspring[-1] = None
             else:
                 spring_min = min(flow_data[timings[-1] + 28: timings[-1] + 42]) 
@@ -173,10 +173,11 @@ def calc_spring_transition_timing_magnitude(flow_matrix, class_number, summer_ti
             timings[-1] = timings_endspring[-1]  # try directly substituting bottom timing for top one
 
             """Assign new magnitude metrics for monsoon season (botton of spring recession until dry season)"""
-            if summer_timings[column_number] is not None and timings[-1] < summer_timings[column_number]:
-                monsoon_flows = flow_data[timings[-1]:summer_timings[column_number]]
-                monsoon_50s[-1] = np.nanmedian(monsoon_flows)
-                monsoon_90s[-1] = np.nanquantile(monsoon_flows, .9)
+            if summer_timings[column_number] is not None and timings[-1] is not None:
+                if summer_timings[column_number] is not None and timings[-1] < summer_timings[column_number]:
+                    monsoon_flows = flow_data[timings[-1]:summer_timings[column_number]]
+                    monsoon_50s[-1] = np.nanmedian(monsoon_flows)
+                    monsoon_90s[-1] = np.nanquantile(monsoon_flows, .9)
 
             #_spring_transition_plotter(x_axis, flow_data, filter_data, x_axis_window, spl_first_deriv, new_index, max_flow_index, timings, current_search_window_left, current_search_window_right, spl, column_number, maxarray)
 
@@ -220,7 +221,11 @@ def calc_spring_transition_roc(flow_matrix, spring_timings, summer_timings):
 
             # RGB change: set spring roc to calc from ~approx height of spring pulse (6 weeks before bottom of spring pulse)
             # until the set bottom of the spring pulse (spring timing for RGB calcs.)
-            flow_data = raw_flow[int(spring_timing - 42): int(spring_timing)]
+            if int(spring_timing) < 42:
+                offset = int(spring_timing)
+            else:
+                offset = 42
+            flow_data = raw_flow[int(spring_timing - offset): int(spring_timing)]
             rate_of_change_start_end = (
                 flow_data[-1] - flow_data[0]) / flow_data[0]
 

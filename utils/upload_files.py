@@ -31,7 +31,7 @@ def upload_files(start_date, files, flow_class):
         write_to_csv(file_name, result, 'drh')
         write_to_csv(file_name, result, 'annual_flow_result')
         write_to_csv(file_name, result, 'parameters', flow_class)
-        # draw_plots(file_name, result)
+        draw_plots(file_name, result)
         
     return True
 
