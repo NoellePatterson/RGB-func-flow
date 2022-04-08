@@ -97,6 +97,8 @@ def get_result(matrix, julian_start_date, flow_class):
 
     result["spring"] = {}
     result["spring"]["magnitudes"] = calculated_metrics.spring_magnitudes
+    result["spring"]["monsoon_50s"] = calculated_metrics.spring_monsoon_50s
+    result["spring"]["monsoon_90s"] = calculated_metrics.spring_monsoon_90s
     # result["spring"]["timings_julian"] = list(map(
     #     remove_offset_from_julian_date, calculated_metrics.spring_timings, itertools.repeat(julian_start_date)))
     result["spring"]["timings_water"] = calculated_metrics.spring_timings

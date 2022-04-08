@@ -100,10 +100,12 @@ class Gauge:
                 winter_magnitudes_POR[percent], dtype=np.float)
 
     def spring_transition_timing_magnitude(self):
-        spring_timings, spring_magnitudes = calc_spring_transition_timing_magnitude(
+        spring_timings, spring_magnitudes, spring_monsoon_50s, spring_monsoon_90s = calc_spring_transition_timing_magnitude(
             self.flow_matrix, self.class_number, self.summer_timings)
         self.spring_timings = np.array(spring_timings, dtype=np.float)
         self.spring_magnitudes = np.array(spring_magnitudes, dtype=np.float)
+        self.spring_monsoon_50s = np.array(spring_monsoon_50s, dtype=np.float)
+        self.spring_monsoon_90s = np.array(spring_monsoon_90s, dtype=np.float)
 
     def spring_transition_duration(self):
         spring_durations = calc_spring_transition_duration(
@@ -145,7 +147,7 @@ class Gauge:
         self.fall_durations = np.array(fall_durations, dtype=np.float)
 
     def fall_winter_baseflow(self):
-        spring_timings, spring_magnitudes = calc_spring_transition_timing_magnitude(
+        spring_timings, spring_magnitudes, monsoon_50s, monsoon_90s = calc_spring_transition_timing_magnitude(
             self.flow_matrix, self.class_number, self.summer_timings)
         self.fall_flush_timings_durations()
         wet_baseflows_10, wet_baseflows_50, wet_bfl_durs = calc_fall_winter_baseflow(

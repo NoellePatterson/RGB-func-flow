@@ -5,6 +5,8 @@ TYPES = {
     'spring_timings_julian': "SP_Tim_julian",
     'spring_timings_water': "SP_Tim",
     'spring_magnitudes': "SP_Mag",
+    'spring_monsoon_50s': "SP_Mons_mag_50",
+    'spring_monsoon_90s': "SP_Mons_mag_90",
     'spring_durations': "SP_Dur",
     'spring_rocs': "SP_ROC",
     'summer_timings_julian': "DS_Tim_julian",

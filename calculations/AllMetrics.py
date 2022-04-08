@@ -95,10 +95,12 @@ class Metrics:
 
     def spring_transition_timing_magnitude(self):
         params = self.params['spring_params'] if self.params else spring_params
-        spring_timings, spring_magnitudes = calc_spring_transition_timing_magnitude(
+        spring_timings, spring_magnitudes, spring_monsoon_50s, spring_monsoon_90s = calc_spring_transition_timing_magnitude(
             self.flow_matrix, self.flow_class, self.summer_timings, params)
         self.spring_timings = spring_timings
         self.spring_magnitudes = spring_magnitudes
+        self.spring_monsoon_50s = spring_monsoon_50s
+        self.spring_monsoon_90s = spring_monsoon_90s
 
     def spring_transition_duration(self):
         spring_durations = calc_spring_transition_duration(
