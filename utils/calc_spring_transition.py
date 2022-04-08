@@ -16,12 +16,17 @@ def calc_spring_transition_timing_magnitude(flow_matrix, class_number, summer_ti
     timings = []
     timings_endspring = []
     magnitudes = []
+    monsoon_50s = []
+    monsoon_90s = []
 
     for column_number, _ in enumerate(flow_matrix[0]):
 
         timings.append(None)
         timings_endspring.append(None)
         magnitudes.append(None)
+        monsoon_50s.append(None)
+        monsoon_90s.append(None)
+
 
 
         """Check to see if water year has more than allowed nan or zeros"""
@@ -166,6 +171,12 @@ def calc_spring_transition_timing_magnitude(flow_matrix, class_number, summer_ti
                 spring_min_index = find_index(flow_data[timings[-1] + 28: timings[-1] + 42], spring_min)
                 timings_endspring[-1] = timings[-1] + 28 + spring_min_index
             timings[-1] = timings_endspring[-1]  # try directly substituting bottom timing for top one
+
+            """Assign new magnitude metrics for monsoon season (botton of spring recession until dry season)"""
+            if summer_timings[column_number] is not None and timings[-1] < summer_timings[column_number]:
+                monsoon_flows = flow_data[timings[-1]:summer_timings[column_number]]
+                monsoon_50s[-1] = np.nanmedian(monsoon_flows)
+                monsoon_90s[-1] = np.nanquantile(monsoon_flows, .9)
 
             #_spring_transition_plotter(x_axis, flow_data, filter_data, x_axis_window, spl_first_deriv, new_index, max_flow_index, timings, current_search_window_left, current_search_window_right, spl, column_number, maxarray)
 
