@@ -31,7 +31,7 @@ def upload_files(start_date, files, flow_class):
         write_to_csv(file_name, result, 'drh')
         write_to_csv(file_name, result, 'annual_flow_result')
         write_to_csv(file_name, result, 'parameters', flow_class)
-        draw_plots(file_name, result)
+        # draw_plots(file_name, result)
         
     return True
 
@@ -141,11 +141,15 @@ def write_to_csv(file_name, result, file_type, *args):
         summer_no_flow = result['summer']['no_flow_counts']
         del result['summer']['no_flow_counts']
 
+        # Remove unused metric from wet season
+        # import pdb; pdb.set_trace()
+        del result['wet']['baseflows_10']
+
         dataset = []
         # dict_to_array(result['all_year'], 'all_year', dataset)
-        dict_to_array(result['fall'], 'fall', dataset)
+        # dict_to_array(result['fall'], 'fall', dataset)
         dict_to_array(result['wet'], 'wet', dataset)
-        dict_to_array(result['winter'], 'winter', dataset)
+        # dict_to_array(result['winter'], 'winter', dataset)
         dict_to_array(result['spring'], 'spring', dataset)
         dict_to_array(result['summer'], 'summer', dataset)
         a = np.array(dataset)
