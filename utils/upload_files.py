@@ -31,7 +31,7 @@ def upload_files(start_date, files, flow_class):
         write_to_csv(file_name, result, 'drh')
         write_to_csv(file_name, result, 'annual_flow_result')
         write_to_csv(file_name, result, 'parameters', flow_class)
-        draw_plots(file_name, result)
+        # draw_plots(file_name, result)
         
     return True
 
@@ -157,14 +157,15 @@ def write_to_csv(file_name, result, file_type, *args):
                    fmt='%s', header='Year, ' + year_ranges, comments='')
 
         """Create supplementary metrics file"""
+        # Remove Std and DS-no-flow from RGB outputs
         supplementary = []
         supplementary.append(['Avg'] + result['all_year']
                              ['average_annual_flows'])
-        supplementary.append(['Std'] + result['all_year']
-                             ['standard_deviations'])
+        # supplementary.append(['Std'] + result['all_year']
+        #                      ['standard_deviations'])
         supplementary.append(['CV'] + result['all_year']
                              ['coefficient_variations'])
-        supplementary.append(['DS_No_Flow'] + summer_no_flow)
+        # supplementary.append(['DS_No_Flow'] + summer_no_flow)
         np.savetxt(file_name + '_supplementary_metrics.csv', supplementary, delimiter=',',
                    fmt='%s', header='Year, ' + year_ranges, comments='')
 
