@@ -163,14 +163,15 @@ def calc_spring_transition_timing_magnitude(flow_matrix, class_number, summer_ti
             if summer_timings[column_number] is not None and timings[-1] > summer_timings[column_number]:
                 timings[-1] = None
 
-            """Create separate timing for the bottom of the spring recession"""
+            """Create separate timing for the bottom of the spring recession (start of monsoon)"""
             if timings[-1] == None or timings[-1] > 315: # Can't set bottom of spring recession too late in year
-                timings_endspring[-1] = None
+                timings_endspring[-1] = None # If spring recession peak set too late, don't bother setting monsoon timing
             else:
-                spring_min = min(flow_data[timings[-1] + 28: timings[-1] + 42]) 
+                # monsoon timing is lowest flow within period 4-6 after peak of spring recession
+                spring_min = min(flow_data[timings[-1] + 28: timings[-1] + 42]) # search for timing 4-6 weeks after peak of spring recession
                 spring_min_index = find_index(flow_data[timings[-1] + 28: timings[-1] + 42], spring_min)
-                timings_endspring[-1] = timings[-1] + 28 + spring_min_index
-            timings[-1] = timings_endspring[-1]  # try directly substituting bottom timing for top one
+                timings_endspring[-1] = timings[-1] + 28 + spring_min_index # monsoon timing set relative to spring recession timing 
+            timings[-1] = timings_endspring[-1]  #  directly substitute monsoon timing for spring recession timing
 
             """Assign new magnitude metrics for monsoon season (botton of spring recession until dry season)"""
             if summer_timings[column_number] is not None and timings[-1] is not None:
